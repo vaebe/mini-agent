@@ -6,11 +6,11 @@ import { createInterface } from 'node:readline'
 
 // 通过 OpenAI 兼容接口连接讯飞模型服务。
 const oai = createOpenAI({
-  baseURL: 'https://maas-api.cn-huabei-1.xf-yun.com/v1',
-  apiKey: process.env.API_KEY,
+  baseURL: process.env.OPEN_AI_BASE_URL,
+  apiKey: process.env.OPEN_AI_API_KEY,
 });
 
-const model = oai.chat('spark-x2.6')
+const model = oai.chat('deepseek-v4.1-flash-1017')
 
 // 从终端读取用户输入，并在终端显示提示。
 const rl = createInterface({ input: process.stdin, output: process.stdout })
