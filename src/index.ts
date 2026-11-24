@@ -4,6 +4,7 @@ import { createOpenAI } from '@ai-sdk/openai';
 import { createInterface } from 'node:readline'
 import { weatherTool, calculatorTool } from './tools/utility-tools';
 import { agentLoop } from './agent-loop'
+import type { BudgetState } from './agent-loop'
 
 
 // 每轮模型请求共用的行为说明。
@@ -21,6 +22,9 @@ const model = oai.chat('deepseek-v4.1-flash-1017')
 
 // 注册模型可调用的工具，键名就是工具名称。
 const tools = { get_weather: weatherTool, calculator: calculatorTool };
+
+// 预算由调用方持有，跨轮持续累计——agentLoop 只负责消费它
+const budget: BudgetState = { used: 0, limit: 50000 };
 
 // 从终端读取用户输入，并在终端显示提示。
 const rl = createInterface({ input: process.stdin, output: process.stdout })
@@ -44,7 +48,7 @@ async function ask() {
     messages.push({ role: 'user', content: trimmed });
 
     // 执行本轮模型与工具交互，并由循环更新对话历史。
-    await agentLoop(model, tools, messages, SYSTEM);
+    await agentLoop(model, tools, messages, SYSTEM, budget);
 
     // 本轮回复结束后，再等待下一次输入。
     ask()
