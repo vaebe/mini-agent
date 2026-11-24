@@ -16,6 +16,11 @@ export async function agentLoop(model: any, tools: any, messages: ModelMessage[]
       system,
       tools,
       messages,
+      providerOptions: {
+        openai: {
+          reasoningEffort: 'low',
+        },
+      },
       // 不设 stopWhen，每次只跑一步
     });
 

@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import { streamText, stepCountIs } from 'ai';
 import type { ModelMessage } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai';
 import { createInterface } from 'node:readline'
